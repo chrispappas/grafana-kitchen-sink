@@ -1,3 +1,9 @@
+# simple GET request to list all albums
+GET http://localhost:8080/albums
+Accept: application/json
+
+###
+
 POST http://localhost:8080/albums
 Content-Type: application/json
 
@@ -9,9 +15,6 @@ Content-Type: application/json
 }
 
 ###
-# simple GET request to list all albums
-GET http://localhost:8080/albums
+
+GET http://localhost:8080/albums/2
 Accept: application/json
-
-###
-
