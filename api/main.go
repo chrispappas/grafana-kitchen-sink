@@ -46,8 +46,13 @@ func postAlbums(c *gin.Context) {
 	c.IndentedJSON(http.StatusCreated, newAlbum)
 }
 
+func getHome(c *gin.Context) {
+	c.IndentedJSON(http.StatusOK, gin.H{"status": "Running, GET /albums to get started"})
+}
+
 func main() {
 	router := gin.Default()
+	router.GET("/", getHome)
 	router.GET("/albums", getAlbums)
 	router.GET("/albums/:id", getAlbumByID)
 	router.POST("/albums", postAlbums)

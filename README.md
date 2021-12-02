@@ -10,6 +10,12 @@ tutorial from the official golang docs site
 
 Accessible at http://localhost:8080/albums (see the tutorial for more endpoints)
 
+When making changes to the app, rebuild and restart the docker container:
+
+```bash
+docker-compose up -d --force-recreate --build api
+```
+
 ### Grafana
 
 Grafana is run in a docker container on port 3000
