@@ -1,0 +1,17 @@
+POST http://localhost:8080/albums
+Content-Type: application/json
+
+{
+  "id": "4",
+  "title": "OK Computer",
+  "artist": "Radiohead",
+  "price": 99.99
+}
+
+###
+# simple GET request to list all albums
+GET http://localhost:8080/albums
+Accept: application/json
+
+###
+
