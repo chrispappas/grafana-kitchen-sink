@@ -1,0 +1,11 @@
+services:
+  api:
+    build: ./api/
+    ports:
+      - "8080:8080"
+  grafana:
+    image: grafana/grafana:7.0.0
+    volumes:
+      - ./grafana-plugins:/var/lib/grafana/plugins
+    ports:
+      - "3000:3000"
