@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/chrispappas/grafana-kitchen-sink/api/controllers"
+	"github.com/chrispappas/grafana-kitchen-sink/api/models"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"os"
@@ -78,6 +80,8 @@ func statsCollector() gin.HandlerFunc {
 func main() {
 	startTime = time.Now()
 
+	models.ConnectDatabase(os.Getenv("DB_DSN"))
+
 	router := gin.Default()
 
 	// add middleware to collect stats on all routes
@@ -88,6 +92,10 @@ func main() {
 	router.GET("/albums", getAlbums)
 	router.GET("/albums/:id", getAlbumByID)
 	router.POST("/albums", postAlbums)
+
+	// add books to the app
+	router.GET("/books", controllers.FindBooks)
+	router.POST("/books", controllers.CreateBook)
 
 	router.Run("0.0.0.0:8080")
 }

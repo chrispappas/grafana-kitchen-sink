@@ -1,0 +1,22 @@
+GET {{host}}/books
+Accept: application/json
+
+###
+
+POST {{host}}/books
+Content-Type: application/json
+
+{
+  "title": "Anathem",
+  "author": "Neal Stephenson"
+}
+
+###
+
+POST {{host}}/books
+Content-Type: application/json
+
+{
+  "title": "Cryptonomicon",
+  "author": "Neal Stephenson"
+}

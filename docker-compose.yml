@@ -1,11 +1,32 @@
 services:
   api:
     build: ./api/
+    restart: on-failure
     ports:
       - "8080:8080"
+    environment:
+      - DB_DSN=dbuser:testing@tcp(mariadb:3306)/grafana-api?charset=utf8mb4
+    depends_on:
+      - mariadb
+
   grafana:
     image: grafana/grafana:7.0.0
     volumes:
       - ./grafana-plugins:/var/lib/grafana/plugins
     ports:
       - "3000:3000"
+
+  mariadb:
+    image: mariadb:latest
+    environment:
+      - MARIADB_USER=dbuser
+      - MARIADB_PASSWORD=testing
+      - MARIADB_ROOT_PASSWORD=testingroot
+      - MARIADB_DATABASE=grafana-api
+    ports:
+      - "3306:3306"
+    volumes:
+      - api-mariadb:/var/lib/mysql
+
+volumes:
+  api-mariadb:

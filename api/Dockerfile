@@ -1,21 +1,22 @@
 FROM golang:1.17-buster AS build
 
-WORKDIR /app
+WORKDIR /go/src/app
 
-COPY go.mod .
-COPY go.sum .
+COPY go.mod ./
+COPY go.sum ./
+
 RUN go mod download
 
-COPY *.go .
+COPY . ./
 
-RUN go build -o /api-server
+RUN go build -o /app/api-server
 
 FROM gcr.io/distroless/base-debian10
 
-WORKDIR /
+WORKDIR /app
 
-COPY --from=build /api-server /api-server
+COPY --from=build /app/api-server /app/api-server
 EXPOSE 8080
 USER nonroot:nonroot
 
-ENTRYPOINT ["/api-server"]
+ENTRYPOINT ["/app/api-server"]
