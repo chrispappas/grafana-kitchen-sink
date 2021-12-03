@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -30,8 +31,6 @@ var endpointReqsMap = make(map[string]int)
 func getAlbumByID(c *gin.Context) {
 	id := c.Param("id")
 
-	endpointReqsMap["GET /albums/"+id] += 1
-
 	for _, a := range albums {
 		if a.ID == id {
 			c.IndentedJSON(http.StatusOK, a)
@@ -42,14 +41,11 @@ func getAlbumByID(c *gin.Context) {
 }
 
 func getAlbums(c *gin.Context) {
-	endpointReqsMap["GET /albums"] += 1
 	c.IndentedJSON(http.StatusOK, albums)
 }
 
 func postAlbums(c *gin.Context) {
 	var newAlbum album
-	endpointReqsMap["POST /albums"] += 1
-
 	if err := c.BindJSON(&newAlbum); err != nil {
 		return
 	}
@@ -59,22 +55,34 @@ func postAlbums(c *gin.Context) {
 }
 
 func getHome(c *gin.Context) {
-	endpointReqsMap["GET /"] += 1
 	c.IndentedJSON(http.StatusOK, gin.H{"status": "Running, GET /albums to get started"})
 }
 
 func getStats(c *gin.Context) {
-	endpointReqsMap["GET /stats"] += 1
 	c.IndentedJSON(http.StatusOK, gin.H{
 		"status":       "running",
 		"uptime":       fmt.Sprintf("%v", time.Now().Sub(startTime)),
 		"endpointHits": endpointReqsMap,
 	})
 }
+
+func statsCollector() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		key := fmt.Sprintf("%s %s", c.Request.Method, c.FullPath())
+		endpointReqsMap[key] += 1
+
+		c.Next()
+	}
+}
+
 func main() {
 	startTime = time.Now()
 
 	router := gin.Default()
+
+	// add middleware to collect stats on all routes
+	router.Use(statsCollector())
+
 	router.GET("/", getHome)
 	router.GET("/stats", getStats)
 	router.GET("/albums", getAlbums)
