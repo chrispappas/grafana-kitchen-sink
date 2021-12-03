@@ -20,3 +20,21 @@ Content-Type: application/json
   "title": "Cryptonomicon",
   "author": "Neal Stephenson"
 }
+
+###
+
+GET {{host}}/books/1
+Accept: application/json
+
+###
+
+PATCH {{host}}/books/1
+Content-Type: application/json
+
+{
+  "author": "Foo Bar"
+}
+
+###
+
+DELETE {{host}}/books/1
